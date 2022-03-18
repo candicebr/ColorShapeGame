@@ -1,19 +1,30 @@
-var elementNumber = 9;
+var elementsNumber = 9;
 var right = 0;
 var wrong = 0;
-
-function playGame() {
-  right = 0;
-  wrong = 0;
-  document.querySelector('#point').innerHTML = right;
-  createList();
-  document.querySelector('.menu').style.display = 'none';
-  document.querySelector('.game').style.display = 'block';
-}
+var maxWrong = 3;
+var countDown = 30;
+var downloadTimer;
 
 // Return random number between 0 & 1
 function getRandom() {
   return Math.random();
+}
+
+
+// Init Game
+function playGame() {
+  right = 0;
+  wrong = 0;
+  newStep();
+  document.querySelector('.menu').style.display = 'none';
+  document.querySelector('.game').style.display = 'block';
+}
+
+// New step of the game
+function newStep() {
+  Timer(countDown);
+  document.querySelector('#point').innerHTML = right;
+  createList();
 }
 
 function createList() {
@@ -27,7 +38,7 @@ function createList() {
   let r = Math.floor(getRandom() * (255));
   let g = Math.floor(getRandom() * (255));
   let b = Math.floor(getRandom() * (255));
-  for (let i = 0; i < elementNumber; i++) {
+  for (let i = 0; i < elementsNumber; i++) {
     addElement(list, r, g, b);
   }
 
@@ -43,7 +54,7 @@ function addElement(list, r, g, b) {
   element.classList.add('element');
 
   // size according to number of element
-  let size = 100 / Math.sqrt(elementNumber) - 2 + '%';
+  let size = 100 / Math.sqrt(elementsNumber) - 2 + '%';
   element.style.width = size;
   element.style.height = size;
 
@@ -58,7 +69,7 @@ function addElement(list, r, g, b) {
 
 // Get a random element id
 function RandomId() {
-  let randomNumber = Math.floor(getRandom() * (elementNumber));
+  let randomNumber = Math.floor(getRandom() * (elementsNumber));
   return randomNumber;
 }
 
@@ -84,11 +95,10 @@ function makeDifference(element, r, g, b, diff) {
 function test(element) {
   if (element.id == 'different') {
     right++;
-    document.querySelector('#point').innerHTML = right;
-    createList();
+    newStep();
   } else {
     wrong++;
-    if (wrong > 5) {
+    if (wrong == maxWrong) {
       LooseGame();
     }
     console.log('Wrong : ' + wrong);
@@ -103,4 +113,35 @@ function LooseGame() {
   document.querySelector('#play-button').innerHTML = 'retry';
   document.querySelector('#title').innerHTML = 'Sorry you loose...';
   document.querySelector('.menu').style.display = 'block';
+}
+
+// Countdown progress bar
+function Timer(countDown) {
+  clearInterval(downloadTimer);
+
+  // Reset Progress Bar
+  let progressBar = document.querySelector('.progress');
+  while (progressBar.firstChild) {
+    progressBar.removeChild(progressBar.firstChild);
+  }
+  let element = document.createElement('div');
+  element.classList.add('progress-value');
+  progressBar.appendChild(element);
+
+  // Set width
+  let width = countDown * 0.5 + 'rem';
+  progressBar.style.width = width;
+  element.style.width = width;
+
+  let timeleft = countDown;
+
+  downloadTimer = setInterval(function() {
+    if (timeleft <= 0) {
+      clearInterval(downloadTimer);
+      LooseGame();
+    }
+    timeleft -= 0.1;
+    document.querySelector('.progress-value').style.width =
+        timeleft * 0.5 + 'rem';
+  }, 10);
 }
