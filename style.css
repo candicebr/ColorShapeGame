@@ -1,10 +1,55 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+html, body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: lighter;
     text-align: center;
-    margin-top: 10rem;
+    margin: 0;
+    height: 100vh;
+    overflow:hidden;
+    background: linear-gradient(rgb(195,37,39), rgb(200, 200, 200), rgb(37,195,193));
+}
+
+.ui, .menu {
+    color: white;
+    padding: 0.5rem;
+    width: 35%;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 4px 3px rgba(0, 0, 0, 0.1);
+}
+
+.menu {
+    margin-top: 15rem;
+    padding: 2rem;
 }
 
 .game {
+    padding-top: 7rem;
     display: none;
+}
+
+button {
+  background-color: #ff4754;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  border-style: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px 16px;
+  transition: color 100ms;
+  font-size: medium;
+  box-shadow: 1px 4px 3px rgba(0, 0, 0, 0.1);
+}
+
+button:hover,
+button:focus {
+  background-color: #ff4753c2;
 }
 
 .progress {
@@ -13,7 +58,7 @@ body {
     margin-right: auto;
     height: 0.6rem;
     border-radius: 0.3rem;
-    background-color: rgb(199, 199, 199);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .progress .progress-value {
@@ -39,8 +84,8 @@ body {
 }
 
 .element {
-    /*width: 50px;
-    height: 50px;*/
+    width: 50px;
+    height: 50px;
     cursor: pointer;
 }
 

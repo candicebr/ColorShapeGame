@@ -21,37 +21,17 @@ const SVGs = {
   ]
 };
 
-
 var elementsNumber = 4;
 var right = 0;
 var wrong = 0;
 var maxWrong = 3;
 var countDown = 30;
-var downloadTimer;
+var downloadTimer;  // keep track to reset before setting an other timer
 
-/*
-var color = '#546322';
-var complementary = hexToComplimentary(color);
-var HexaColor = ('000000' + (color.toString(16))).slice(-6);
-var complement = ('000000' + (('0xffffff' ^ color).toString(16))).slice(-6);
-document.querySelector('#color').style.backgroundColor = '#' + HexaColor;
-console.log(complement);
-document.querySelector('#complement').style.backgroundColor = '#' + complement;
 
-/* hexToComplimentary : Converts hex value to HSL, shifts * hue by 180 degrees
- * and then converts hex, giving complimentary color * as a hex value * @param
- * [String] hex : hex value * @return [String] : complimentary color as hex
- * value */
-/*
-function hexToComplimentary(hex) {
-  var rgb = 'rgb(' +
-      (hex = hex.replace('#', ''))
-          .match(new RegExp('(.{' + hex.length / 3 + '})', 'g'))
-          .map(function(l) {
-            return parseInt(hex.length % 2 ? l + l : l, 16);
-          })
-          .join(',') +
-      ')';  // Get array of RGB values
+
+// Converts to HSL, shifts * hue by 180 degrees
+function getComplementary(rgb) {
   rgb = rgb.replace(/[^\d,]/g, '').split(',');
   var r = rgb[0], g = rgb[1], b = rgb[2];
   // Convert RGB to HSL //
@@ -105,8 +85,8 @@ function hexToComplimentary(hex) {
   g = Math.round(g * 255);
   b = Math.round(b * 255);  // Convert r b and g values to hex
   rgb = b | (g << 8) | (r << 16);
-  return '#' + (0x1000000 | rgb).toString(16).substring(1);
-}*/
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
 
 // TODO : fonction de densité à faire par rapport au temps pour la
 // différence de couleur
@@ -192,6 +172,12 @@ function createList() {
   for (let i = 0; i < elementsNumber; i++) {
     addElement(list, r, g, b, shape);
   }
+
+  // Set background gradient
+  var color = 'rgb(' + r + ',' + g + ',' + b + ')';
+  var complementary = getComplementary(color);
+  document.body.style.background = 'linear-gradient(rgb(' + r + ',' + g + ',' +
+      b + '), rgb(200, 200, 200), ' + complementary + ')';
 
   // Set Different Element
   differentElement = list.children[getRandomId()];
@@ -284,7 +270,7 @@ function LooseGame() {
   document.querySelector('.game').style.display = 'none';
 
   // Display retry menu
-  document.querySelector('#play-button').innerHTML = 'retry';
+  document.querySelector('#play-button').innerHTML = 'Retry';
   document.querySelector('#title').innerHTML = 'Sorry you loose...';
   document.querySelector('#score').innerHTML = 'Score : ' + right;
   document.querySelector('.menu').style.display = 'block';
