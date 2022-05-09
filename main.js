@@ -18,6 +18,16 @@ const SVGs = {
       transform: 'matrix(1,0,0,1,-334.097,-145)',
       d: 'M394.759,167.638C400.37,153.944 413.701,145 428.5,145C443.299,145 456.63,153.944 462.241,167.638L469.95,186.45L490.223,187.968C504.98,189.073 517.606,198.987 522.179,213.062C526.752,227.136 522.365,242.579 511.076,252.147L495.567,265.291L500.388,285.041C503.897,299.418 498.369,314.49 486.397,323.188C474.424,331.887 458.382,332.486 445.794,324.706L428.5,314.018L411.206,324.706C398.618,332.486 382.576,331.887 370.603,323.188C358.631,314.49 353.103,299.418 356.612,285.041L361.433,265.291L345.924,252.147C334.635,242.579 330.248,227.136 334.821,213.062C339.394,198.987 352.02,189.073 366.777,187.968L387.05,186.45L394.759,167.638Z'
     }
+  ],
+  pentagone: [
+    {
+      transform: 'matrix(1.04746,0,0,1.04746,-269.36,-167.736)',
+      d: 'M339.712,164.663C341.076,163.671 342.924,163.671 344.288,164.663C356.155,173.284 410.587,212.832 422.454,221.453C423.818,222.444 424.389,224.202 423.868,225.806C419.335,239.755 398.544,303.745 394.011,317.694C393.49,319.298 391.995,320.384 390.309,320.384L293.691,320.384C292.005,320.384 290.51,319.298 289.989,317.694C285.456,303.745 264.665,239.755 260.132,225.806C259.611,224.202 260.182,222.444 261.546,221.453C273.413,212.832 327.845,173.284 339.712,164.663Z'
+    },
+    {
+      transform: 'matrix(1.04746,0,0,1.04746,-269.36,-167.736)',
+      d: 'M335.715,167.566C339.463,164.843 344.537,164.843 348.285,167.566C363.668,178.742 403.074,207.373 418.457,218.549C422.205,221.272 423.773,226.098 422.341,230.504C416.466,248.587 401.414,294.913 395.538,312.996C394.106,317.402 390.001,320.384 385.369,320.384L298.631,320.384C293.999,320.384 289.894,317.402 288.462,312.996C282.586,294.913 267.534,248.587 261.659,230.504C260.227,226.098 261.795,221.272 265.543,218.549C280.926,207.373 320.332,178.742 335.715,167.566Z'
+    }
   ]
 };
 
@@ -108,12 +118,35 @@ function getRandomBetween(min, max) {
   return Math.floor(getRandom() * (max - min + 1) + min);
 }
 
+// Variable aléatoire suivant la loi de Bernouilli
+function getRandomBernouilli(p) {
+  let random = getRandom();
+  if (random < p) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+// Variable aléatoire suivant la loi Binomiale
+function getRandomBinomiale(n, p) {
+  let c = 0;
+  for (let i = 0; i < n; i++) {
+    c += getRandomBernouilli(p);
+  }
+  return c;
+}
+
+
 // Get random shape
 function getRandomShape() {
-  random = getRandom();
-  if (random < 0.5) {
+  random = getRandomBinomiale(2, 0.5);
+  console.log(random);
+  if (random == 0) {
     return 'square';
-  } else {
+  } else if (random == 1) {
+    return 'pentagone';
+  } else if (random == 2) {
     return 'star';
   }
 }
@@ -208,10 +241,10 @@ function addElement(list, r, g, b, shape) {
 
 // Make the visual difference
 function makeDifference(element, r, g, b, shape) {
-  let randomNumber = getRandom();
+  let randomBernouilli = getRandomBernouilli(0.5);
 
   // Different shape
-  if (randomNumber < 0.5) {
+  if (randomBernouilli == 1) {
     element.removeChild(element.firstChild);
     createSVG(element, shape, 1);
   }
